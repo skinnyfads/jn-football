@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const baseLeagueSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   type: {
     type: {
       mode: { type: String, enum: ["random", "highestRank", "lowestRank"], required: true },
