@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
+import routes from "./routes/index.js";
 
 const app = express();
 const env = process.env;
@@ -13,6 +14,7 @@ if (!uri) {
 }
 app.use(cors());
 app.use(express.json());
+app.use(routes);
 
 mongoose.connect(uri, () => {
   console.log("MDB Connected Successfully");
