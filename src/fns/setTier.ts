@@ -11,7 +11,7 @@ async function setTier() {
     const teams = await Team.find({ tier: currentTier });
     const maxTotalTeam = configTotalTeams[currentTier as keyof typeof config.totalTeams] || configTotalTeams.default;
 
-    if (teams.length <= maxTotalTeam) {
+    if (teams.length < maxTotalTeam) {
       return currentTier;
     }
   }
