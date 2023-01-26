@@ -10,9 +10,9 @@ import Team from "../models/Team.js";
 
 async function start(req: Request, res: Response) {
   const jnLeague = await Team.find();
-  const configDegradationDefault = config.degradation.default;
+  const configTotalTeams = config.totalTeams;
   const lastLeague = await League.find().sort({ _id: -1 }).limit(1);
-  const lastYear = (lastLeague[0] || {}).year;
+  const lastYear = (lastLeague[0] || {}).year + 1;
   const startYear = config.startYear;
   const leagues: ILeague[] = [];
 
@@ -21,8 +21,10 @@ async function start(req: Request, res: Response) {
   while (true) {
     currentTier++;
     const teams = jnLeague.filter((team) => team.tier === currentTier);
+    const currentTierTotalTeams =
+      configTotalTeams[currentTier as keyof typeof configTotalTeams] || configTotalTeams.default;
 
-    if (teams.length <= configDegradationDefault) {
+    if (teams.length < currentTierTotalTeams) {
       if (leagues.length) {
         return res.send(leagues);
       } else {
