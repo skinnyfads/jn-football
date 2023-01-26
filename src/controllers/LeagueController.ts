@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import config from "../config.json" assert { type: "json" };
+import config from "../config.js";
 import generateLeague from "../fns/generateLeague.js";
+import updateStrength from "../fns/updateStrength.js";
 import { ILeague, IMatch } from "../interfaces/index.js";
 import BaseLeague from "../models/BaseLeague.js";
 import League from "../models/League.js";
@@ -19,7 +20,6 @@ async function start(req: Request, res: Response) {
 
   while (true) {
     currentTier++;
-
     const teams = jnLeague.filter((team) => team.tier === currentTier);
 
     if (teams.length <= configDegradationDefault) {
@@ -33,6 +33,10 @@ async function start(req: Request, res: Response) {
 
     if (!baseLeague) {
       return res.status(404).send({ message: "Please create base JN League first" });
+    }
+    for (let i = 0; i < teams.length; i++) {
+      const newStrength = updateStrength(teams[i].strength);
+      await Team.updateOne({ _id: teams[i]._id }, { strength: newStrength });
     }
     const league = await new League({
       baseLeague: baseLeague._id,
