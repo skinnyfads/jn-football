@@ -6,7 +6,6 @@ const baseLeagueSchema = new mongoose.Schema({
     type: {
       mode: { type: String, enum: ["random", "highestRank", "lowestRank"], required: true },
       maxTeam: { type: Number, required: true },
-      tiers: { type: [Number], required: true },
       strength: { type: String, enum: ["normal", "same"], required: true },
     },
     required: true,

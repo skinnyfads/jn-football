@@ -38,6 +38,7 @@ async function start(req: Request, res: Response) {
       baseLeague: baseLeague._id,
       year: lastYear || startYear,
       participants: teams.map((team) => team._id),
+      tier: currentTier,
     }).save();
     const schedules = generateLeague(teams);
     const matches: IMatch[] = [];
